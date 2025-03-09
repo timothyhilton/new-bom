@@ -1,0 +1,1 @@
+.\node-binaries\node.exe index.js

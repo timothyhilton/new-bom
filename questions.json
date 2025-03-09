@@ -1,0 +1,62 @@
+[
+    {
+        "question": "Which of these is a cool colour?",
+        "answers": [
+            "Orange",
+            "Green",
+            "Red",
+            "Black"
+        ],
+        "correct_answer": 1,
+        "time_limit": 10000,
+        "year_level": 7
+    },
+    {
+        "question": "An SSD is a:",
+        "answers": [
+            "Solid System Dock",
+            "Secure Socket Data",
+            "Solid State Drive",
+            "Secure State Date"
+        ],
+        "correct_answer": 2,
+        "time_limit": 10000,
+        "year_level": 7
+    },
+    {
+        "question": "Which change of state process is the opposite of evaporation?",
+        "answers": [
+            "Sublimation",
+            "Condensation",
+            "Freezing",
+            "Deposition"
+        ],
+        "correct_answer": 1,
+        "time_limit": 10000,
+        "year_level": 7
+    },
+    {
+        "question": "What does oyasuminasai mean in Japanese?",
+        "answers": [
+            "I am sorry",
+            "Good night",
+            "Nice to meet you",
+            "Good morning"
+        ],
+        "correct_answer": 1,
+        "time_limit": 10000,
+        "year_level": 7
+    },
+    {
+        "question": "Which of the following is not a primary source from Ancient Australia?",
+        "answers": [
+            "Oral traditions",
+            "Rock paintings and traditional art",
+            "Middens",
+            "Letters written by European colonists from 1788 onwards"
+        ],
+        "correct_answer": 3,
+        "time_limit": 10000,
+        "year_level": 7
+    }
+]

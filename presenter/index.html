@@ -1,0 +1,80 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./index.css">
+    <title>present bom</title>
+</head>
+
+<html>
+    <body>
+        <h1 id="question"></h1>
+        <div id="imageDiv"></div>
+        <div id="answers">
+
+        </div>
+        <div id="bottomRow">
+            <div id="houseIconContainer">
+            
+            </div>
+            <p id="timer"></p>
+        </div>
+    </body>
+</html>
+
+<script>
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    const houseIconContainer = document.getElementById("houseIconContainer")
+    const answersDiv = document.getElementById("answers")
+
+    const socket = io(urlParams.get("ip"))
+
+    socket.on("connect", () => {
+        socket.emit("join", "presenter")
+    })
+    function updateTimer(){
+        document.getElementById("timer").innerHTML = Math.max(((currentQuestion.t + currentQuestion.time_limit - Date.now()) / 1000).toFixed(1), 0)
+    }
+    setInterval(updateTimer, 80)
+
+    socket.on("displayQuestion", (question) => {
+        currentQuestion = question
+        answersDiv.innerHTML = null
+        houseIconContainer.innerHTML = null
+        console.log(question)
+
+        question.answers.forEach(answer => {
+            let button = document.createElement("BUTTON")
+            button.innerHTML = answer
+            button.setAttribute("class", "answerButton")
+            answersDiv.appendChild(button)
+        })
+
+        console.log(question)
+
+        question.housesAnswered.forEach(house => {
+            let houseIcon = document.createElement("div")
+            houseIcon.innerHTML = house
+            houseIcon.setAttribute("class", "houseIcon")
+            houseIconContainer.appendChild(houseIcon)
+        })
+        
+        let imageDiv = document.getElementById("imageDiv")
+        imageDiv.innerHTML = null
+
+        if(question.image_paths){
+            question.image_paths.forEach(image => {
+                let imageElement = document.createElement("IMG")
+                imageElement.setAttribute("src", image)
+                imageElement.setAttribute("class", "image")
+                imageDiv.append(imageElement)
+            })
+        }
+
+        document.getElementById("question").innerHTML = question.question
+    })
+</script>

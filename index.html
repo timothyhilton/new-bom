@@ -1,0 +1,108 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <title>choose house</title>
+</head>
+
+<style>
+    .outline-div{
+        border: 1px solid black;
+        width: fit-content;
+        padding:5px;
+    }
+</style>
+
+<html>
+    <body>
+        <div class="outline-div">
+            <h3>test the connection here</h3>
+            <p>http://10.131.4.42:3000</p>
+            <p>http://10.249.7.116:3000</p>
+            <p>http://10.131.4.9:3000</p>
+            <p>http://10.249.5.159:3000</p>
+            
+            <input id="ip" placeholder="enter server address here"></input>
+            <button onclick="testConnection()">connect</button>
+            <p id="connected-status">not connected</p>
+
+            <script>
+                function testConnection(){
+                    const ip = document.getElementById("ip").value
+                    const connectedStatus = document.getElementById("connected-status")
+                    const socket = io(ip)
+                    
+                    connectedStatus.innerHTML = "attempting to connect"
+    
+                    socket.on("connect", () => {
+                        connectedStatus.innerHTML = "connected"
+                    })
+                }
+            </script>
+        </div>
+
+        <div class="outline-div" style="margin-top: 5px;">
+            <h3>join here</h3>
+            <button onclick="joinGame('wesley')">Wesley</button>
+            <button onclick="joinGame('booth')">Booth</button>
+            <button onclick="joinGame('elliot')">Elliot</button>
+            <button onclick="joinGame('graham')">Graham</button>
+
+            <script>
+                function joinGame(identifier){
+                    const ip = document.getElementById("ip").value
+                    const connectedStatus = document.getElementById("connected-status")
+
+                    if(connectedStatus.innerHTML != "connected"){
+                        alert("you must successfully test the connection before you can join!")
+                        return
+                    }
+
+                    window.location.href = "./player/index.html?identifier=" + identifier + "&ip=" + ip
+                }
+            </script>
+        </div>
+
+        <div class="outline-div" style="margin-top: 5px;">
+            <h3>control bom here</h3>
+            <button onclick="joinController()">connect</button>
+
+            <script>
+                function joinController(identifier){
+                    const ip = document.getElementById("ip").value
+                    const connectedStatus = document.getElementById("connected-status")
+
+                    if(connectedStatus.innerHTML != "connected"){
+                        alert("you must successfully test the connection before you can join!")
+                        return
+                    }
+
+                    window.location.href = "./controller/index.html?ip=" + ip
+                }
+            </script>
+        </div>
+
+        <div class="outline-div" style="margin-top: 5px;">
+            <h3>present bom here</h3>
+            <button onclick="joinPresenter()">connect</button>
+
+            <script>
+                function joinPresenter(identifier){
+                    const ip = document.getElementById("ip").value
+                    const connectedStatus = document.getElementById("connected-status")
+
+                    if(connectedStatus.innerHTML != "connected"){
+                        alert("you must successfully test the connection before you can join!")
+                        return
+                    }
+
+                    window.location.href = "./presenter/index.html?ip=" + ip
+                }
+            </script>
+        </div>
+    </body>
+</html>
