@@ -21,10 +21,6 @@
     <body>
         <div class="outline-div">
             <h3>test the connection here</h3>
-            <p>http://10.131.4.42:3000</p>
-            <p>http://10.249.7.116:3000</p>
-            <p>http://10.131.4.9:3000</p>
-            <p>http://10.249.5.159:3000</p>
             
             <input id="ip" placeholder="enter server address here"></input>
             <button onclick="testConnection()">connect</button>
@@ -32,7 +28,7 @@
 
             <script>
                 function testConnection(){
-                    const ip = document.getElementById("ip").value
+                    const ip = `http://${document.getElementById("ip").value}:3000`
                     const connectedStatus = document.getElementById("connected-status")
                     const socket = io(ip)
                     
@@ -54,7 +50,7 @@
 
             <script>
                 function joinGame(identifier){
-                    const ip = document.getElementById("ip").value
+                    const ip = `http://${document.getElementById("ip").value}:3000`
                     const connectedStatus = document.getElementById("connected-status")
 
                     if(connectedStatus.innerHTML != "connected"){
@@ -73,7 +69,7 @@
 
             <script>
                 function joinController(identifier){
-                    const ip = document.getElementById("ip").value
+                    const ip = `http://${document.getElementById("ip").value}:3000`
                     const connectedStatus = document.getElementById("connected-status")
 
                     if(connectedStatus.innerHTML != "connected"){
@@ -92,7 +88,7 @@
 
             <script>
                 function joinPresenter(identifier){
-                    const ip = document.getElementById("ip").value
+                    const ip = `http://${document.getElementById("ip").value}:3000`
                     const connectedStatus = document.getElementById("connected-status")
 
                     if(connectedStatus.innerHTML != "connected"){

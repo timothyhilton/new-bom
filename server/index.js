@@ -47,7 +47,20 @@ io.on("connection", (socket) => {
 });
 
 var networkInterfaces = os.networkInterfaces()
-console.log(networkInterfaces)
+const privateIPs = Object.values(networkInterfaces)
+    .flat()
+    .filter(networkInterface => 
+        networkInterface.family === 'IPv4' && 
+        !networkInterface.internal &&
+        (
+            networkInterface.address.startsWith('10.') ||
+            networkInterface.address.startsWith('172.16.') ||
+            networkInterface.address.startsWith('192.168.')
+        )
+    )
+    .map(networkInterface => networkInterface.address)
+
+console.log('possible addresses: ', privateIPs)
 
 httpServer.listen(3000)
 
