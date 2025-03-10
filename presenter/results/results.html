@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>house leaderboard</title>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>house leaderboard</h1>
+  <canvas id="resultsChart"></canvas>
+  <p id="statusMessage">loading results...</p>
+
+  <script>
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString)
+    const ip = urlParams.get("ip")
+
+    const socket = io(ip)
+    const houses = ["wesley", "booth", "elliot", "graham"]
+    const initialScores = houses.map(() => 0)
+
+    const ctx = document.getElementById('resultsChart').getContext('2d')
+    const leaderboardChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: houses,
+        datasets: [{
+          label: 'Correct Answers',
+          data: initialScores,
+          backgroundColor: [
+            'rgba(255, 255, 0, 0.7)', 
+            'rgba(54, 162, 235, 0.7)',
+            'rgba(0, 128, 0, 0.7)',
+            'rgba(255, 99, 132, 0.7)'
+          ],
+          borderColor: [
+            'rgba(255, 255, 0, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(0, 128, 0, 1)',
+            'rgba(255, 99, 132, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { precision: 0 }
+          }
+        }
+      }
+    })
+
+    socket.on("connect", () => {
+      socket.emit("join", "results")
+    })
+
+    socket.on("results", (answers) => {
+      const scores = { wesley: 0, booth: 0, elliot: 0, graham: 0 };
+      answers.forEach(answerObj => {
+        if (answerObj.correct) {
+          if (scores[answerObj.house] !== undefined) {
+            scores[answerObj.house] += 10
+          }
+        }
+      })
+      
+      const updatedScores = houses.map(house => scores[house] || 0)
+
+      leaderboardChart.data.datasets[0].data = updatedScores
+      leaderboardChart.update()
+
+      document.getElementById("statusMessage").textContent = "Leaderboard updated"
+    })
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server.")
+    })
+
+    socket.on("switchScreen", (newScreen) => {
+      if(newScreen == "questions"){
+        window.location.href = `../index.html?ip=${ip}`
+      }
+    })
+  </script>
+</body>
+</html>

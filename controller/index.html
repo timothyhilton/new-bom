@@ -13,13 +13,18 @@
     <body>
         <h1>control panel</h1>
         <div class="outline-div">
+            <h3>switch presenter screens:</h3>
+            <button onclick="switchScreen('questions')">questions</button>
+            <button onclick="switchScreen('results')">results</button>
+        </div>
+        <div class="outline-div">
             <h3>current question:</h3>
             <p id="current_question"></p>
         </div>
         <div class="outline-div">
             <h2>set current question</h2>
             <div id="questions">
-
+                <!-- Grade divs will be appended here -->
             </div>
         </div>
         <div id="bottomRow">
@@ -41,21 +46,43 @@
     })
 
     socket.on("questions", (questions) => {
-        const questionsDiv = document.getElementById("questions")
         questionsArray = questions
-        questionsDiv.innerHTML = null
-        
-        questions.forEach(question => {
-            let questionSelectButton = document.createElement("button")
-            questionSelectButton.innerHTML = question.question
-            questionSelectButton.setAttribute("onclick", `changeQuestion(${questions.indexOf(question)})`)
+        const questionsDiv = document.getElementById("questions")
+        questionsDiv.innerHTML = ""
 
-            questionsDiv.appendChild(questionSelectButton)
+        const gradeContainers = {}
+        const grades = [7, 8, 9, 10, 11, 12]
+        grades.forEach(grade => {
+            const container = document.createElement("div")
+            container.id = `year${grade}`
+            container.className = "grade-container"
+            const header = document.createElement("h3")
+            header.innerText = `Year ${grade}`
+            container.appendChild(header)
+            gradeContainers[grade] = container
+            questionsDiv.appendChild(container)
+        })
+
+        questions.forEach(question => {
+            const btn = document.createElement("button")
+            btn.innerText = question.question
+            btn.onclick = () => changeQuestion(questions.indexOf(question))
+            btn.style.display = "block"
+
+            if (gradeContainers[question.year_level]) {
+                gradeContainers[question.year_level].appendChild(btn)
+            } else {
+                questionsDiv.appendChild(btn)
+            }
         })
     })
 
     function changeQuestion(questionIndex){
-        document.getElementById("current_question").innerHTML = questionsArray[questionIndex].question
+        document.getElementById("current_question").innerText = questionsArray[questionIndex].question
         socket.emit("changeQuestion", questionIndex)
+    }
+
+    function switchScreen(newScreen){
+        socket.emit("switchScreen", newScreen)
     }
 </script>

@@ -41,6 +41,12 @@
     }
     setInterval(updateTimer, 80)
 
+    socket.on("switchScreen", (newScreen) => {
+        if(newScreen == "results"){
+            window.location.href = `./results/results.html?ip=${urlParams.get("ip")}`
+        }
+    })
+
     socket.on("displayQuestion", (question) => {
         currentQuestion = question
         answersDiv.innerHTML = null

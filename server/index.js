@@ -8,7 +8,8 @@ const allowChangingAnswers = false
 const s = {
     house: [],
     controller: [],
-    presenter: []
+    presenter: [],
+    results: []
 }
 const d = new Date()
 const httpServer = createServer()
@@ -37,14 +38,29 @@ io.on("connection", (socket) => {
             return
         }
 
+        if(identifier == "results"){
+            onResultsJoin(socket)
+            console.log("results opened")
+            return
+        }
+
         if(["elliot", "graham", "wesley", "booth"].indexOf(identifier) === -1){
             console.log("unexpected identifier")
             return
         }
         
         onHouseJoin(identifier, socket)
-    });
-});
+    })
+
+    socket.on("switchScreen", (newScreen) => {
+        if(newScreen == "questions"){
+            s.results.forEach(results => results.emit("switchScreen", "questions"))
+        }
+        else if(newScreen == "results"){
+            s.presenter.forEach(presenter => presenter.emit("switchScreen", "results"))
+        }
+    })
+})
 
 var networkInterfaces = os.networkInterfaces()
 const privateIPs = Object.values(networkInterfaces)
@@ -63,6 +79,11 @@ const privateIPs = Object.values(networkInterfaces)
 console.log('possible addresses: ', privateIPs)
 
 httpServer.listen(3000)
+
+function onResultsJoin(socket){
+    socket.emit("results", answers)
+    s.results.push(socket)
+}
 
 function onHouseJoin(houseName, socket){
     socket.emit("displayQuestion", getCurrentQuestion())
