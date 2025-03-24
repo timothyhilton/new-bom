@@ -18,13 +18,32 @@
             <button onclick="switchScreen('results')">results</button>
         </div>
         <div class="outline-div">
+            <h3>points offset</h3>
+            <div>
+                <label>wesley</label>
+                <input type="number" id="wesleyOffset" onchange="updateOffset('wesley')"></input>
+            </div>
+            <div>
+                <label>booth</label>
+                <input type="number" id="boothOffset" onchange="updateOffset('booth')"></input>
+            </div>
+            <div>
+                <label>elliot</label>
+                <input type="number" id="elliotOffset" onchange="updateOffset('elliot')"></input>
+            </div>
+            <div>
+                <label>graham</label>
+                <input type="number" id="grahamOffset" onchange="updateOffset('graham')"></input>
+            </div>
+        </div>
+        <div class="outline-div">
             <h3>current question:</h3>
             <p id="current_question"></p>
         </div>
         <div class="outline-div">
             <h2>set current question</h2>
             <div id="questions">
-                <!-- Grade divs will be appended here -->
+                
             </div>
         </div>
         <div id="bottomRow">
@@ -84,5 +103,10 @@
 
     function switchScreen(newScreen){
         socket.emit("switchScreen", newScreen)
+    }
+
+    function updateOffset(name){
+        const element = document.getElementById(name + "Offset")
+        socket.emit("updateOffset", {houseName: name, newOffset: element.value})
     }
 </script>

@@ -79,5 +79,41 @@
         "answerIndex": 0,
         "correct": true,
         "time_left": 8252
+    },
+    {
+        "house": "wesley",
+        "questionName": "If a= 2, b= -2 and c= -3, evaluate a³ ÷ b² – c",
+        "answer": "5",
+        "questionIndex": 8,
+        "answerIndex": 2,
+        "correct": true,
+        "time_left": 13411
+    },
+    {
+        "house": "booth",
+        "questionName": "An SSD is a:",
+        "answer": "Solid State Drive",
+        "questionIndex": 1,
+        "answerIndex": 2,
+        "correct": true,
+        "time_left": 6754
+    },
+    {
+        "house": "graham",
+        "questionName": "An SSD is a:",
+        "answer": "Solid State Drive",
+        "questionIndex": 1,
+        "answerIndex": 2,
+        "correct": true,
+        "time_left": 7392
+    },
+    {
+        "house": "graham",
+        "questionName": "If a= 2, b= -2 and c= -3, evaluate a³ ÷ b² – c",
+        "answer": "5",
+        "questionIndex": 8,
+        "answerIndex": 2,
+        "correct": true,
+        "time_left": 22081
     }
 ]

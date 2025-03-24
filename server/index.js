@@ -15,13 +15,15 @@ const d = new Date()
 const httpServer = createServer()
 const questions = JSON.parse(fs.readFileSync('../questions.json', 'utf8'))
 var answers = JSON.parse(fs.readFileSync('../answers.json', 'utf8'))
+var other = JSON.parse(fs.readFileSync('../other.json', 'utf8'))
+var presenterMode = ""
 var currentQuestion = null
 var timeAtLastChange = 0
 const io = new Server(httpServer, {
     cors: {
         origin: "*",
         methods: ["GET", "POST"]
-      }
+    }
 })
 
 io.on("connection", (socket) => {
@@ -33,12 +35,18 @@ io.on("connection", (socket) => {
         }
 
         if(identifier == "presenter"){
+            if(presenterMode == "results")
+                socket.emit("switchScreen", "results")
+
             onPresenterJoin(socket)
             console.log("presenter joined")
             return
         }
 
         if(identifier == "results"){
+            if(presenterMode == "questions")
+                socket.emit("switchScreenn", "questions")
+
             onResultsJoin(socket)
             console.log("results opened")
             return
@@ -53,12 +61,20 @@ io.on("connection", (socket) => {
     })
 
     socket.on("switchScreen", (newScreen) => {
-        if(newScreen == "questions"){
+        presenterMode = newScreen
+
+        if(newScreen == "questions")
             s.results.forEach(results => results.emit("switchScreen", "questions"))
-        }
-        else if(newScreen == "results"){
+        else if(newScreen == "results")
             s.presenter.forEach(presenter => presenter.emit("switchScreen", "results"))
-        }
+    })
+
+    socket.on("updateOffset", (data) => {
+        other.pointsOffset[data.houseName] = data.newOffset
+        console.log(other)
+
+        fs.writeFileSync('../other.json', JSON.stringify(data, null, 4))
+        s.controller.forEach(socket => socket.emit("pointsOffset", ""))
     })
 })
 
