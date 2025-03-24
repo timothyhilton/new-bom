@@ -1,189 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>house leaderboard</title>
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      background-color: #121212;
-      color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 20px;
-    }
-    
-    h1 {
-      font-size: 5rem;
-      text-align: center;
-      margin-bottom: 30px;
-      color: #f8f8f8;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-    
-    #chart-container {
-      width: 90%;
-      height: 70vh;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>LEADERBOARD</h1>
-    <div id="chart-container">
-      <canvas id="resultsChart"></canvas>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>house leaderboard</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+        background-color: #121212;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        }
+        
+        .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+        }
+        
+        h1 {
+        font-size: 5rem;
+        text-align: center;
+        margin-bottom: 30px;
+        color: #f8f8f8;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        #chart-container {
+        width: 90%;
+        height: 70vh;
+        }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <h1>leaderboard</h1>
+        <div id="chart-container">
+        <canvas id="resultsChart"></canvas>
+        </div>
     </div>
-  </div>
 
-  <script>
-    const queryString = window.location.search
-    const urlParams = new URLSearchParams(queryString)
-    const ip = urlParams.get("ip")
-
-    const socket = io(ip)
-    const houses = ["wesley", "booth", "elliot", "graham"]
-    const initialScores = houses.map(() => 0)
-    let pointOffsets = {wesley: 0, booth: 0, elliot: 0, graham: 0}
-
-    const ctx = document.getElementById('resultsChart').getContext('2d')
-    const leaderboardChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: houses,
-        datasets: [{
-          label: 'Correct Answers',
-          data: initialScores,
-          backgroundColor: [
-            'rgba(255, 255, 0, 0.8)', 
-            'rgba(54, 162, 235, 0.8)',
-            'rgba(0, 128, 0, 0.8)',
-            'rgba(255, 99, 132, 0.8)'
-          ],
-          borderColor: [
-            'rgba(255, 255, 0, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(0, 128, 0, 1)',
-            'rgba(255, 99, 132, 1)'
-          ],
-          borderWidth: 3
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: {
-          duration: 2500,
-          easing: 'easeOutQuart'
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: { 
-              precision: 0,
-              font: {
-                size: 24,
-                weight: 'bold'
-              },
-              color: 'white'
-            },
-            grid: {
-              color: 'rgba(255, 255, 255, 0.1)'
-            }
-          },
-          x: {
-            ticks: {
-              font: {
-                size: 28,
-                weight: 'bold'
-              },
-              color: 'white'
-            },
-            grid: {
-              display: false
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            display: false
-          }
+    <script>
+        const houses = ["wesley", "booth", "elliot", "graham"]
+        const houseColors = {
+            wesley: { bg: 'rgba(255, 255, 0, 0.8)', border: 'rgba(255, 255, 0, 1)' },
+            booth: { bg: 'rgba(54, 162, 235, 0.8)', border: 'rgba(54, 162, 235, 1)' },
+            elliot: { bg: 'rgba(0, 128, 0, 0.8)', border: 'rgba(0, 128, 0, 1)' },
+            graham: { bg: 'rgba(255, 99, 132, 0.8)', border: 'rgba(255, 99, 132, 1)' }
         }
-      }
-    })
-
-    socket.on("connect", () => {
-      socket.emit("join", "results")
-    })
-
-    socket.on("pointsOffset", (offsetData) => {
-      pointOffsets = offsetData;
-      if (lastAnswers) {
-        updateScoresDisplay(lastAnswers);
-      }
-    })
-
-    let lastAnswers = null;
-    socket.on("results", (answers) => {
-      lastAnswers = answers;
-      updateScoresDisplay(answers);
-    })
-    
-    function updateScoresDisplay(answers) {
-      const scores = { wesley: 0, booth: 0, elliot: 0, graham: 0 }
-      
-      answers.forEach(answerObj => {
-        if (answerObj.correct) {
-          if (scores[answerObj.house] !== undefined) {
-            scores[answerObj.house] += 10
-          }
+        
+        const urlParams = new URLSearchParams(window.location.search)
+        const ip = urlParams.get("ip") || 'http://localhost:3000'
+        const socket = io(ip)
+        
+        let pointOffsets = {wesley: 0, booth: 0, elliot: 0, graham: 0}
+        let currentAnswers = null
+        
+        const ctx = document.getElementById('resultsChart').getContext('2d')
+        const leaderboardChart = initializeChart()
+        
+        function initializeChart() {
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                labels: houses,
+                datasets: [{
+                    label: 'answers',
+                    data: houses.map(() => 0),
+                    backgroundColor: houses.map(house => houseColors[house].bg),
+                    borderColor: houses.map(house => houseColors[house].border),
+                    borderWidth: 3
+                }]
+                },
+                options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                    duration: 2500,
+                    easing: 'easeOutQuart'
+                },
+                scales: {
+                    y: {
+                    beginAtZero: true,
+                    ticks: { 
+                        precision: 0,
+                        font: { size: 24, weight: 'bold' },
+                        color: 'white'
+                    },
+                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                    ticks: {
+                        font: { size: 28, weight: 'bold' },
+                        color: 'white'
+                    },
+                    grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+                }
+            })
         }
-      })
-      
-      houses.forEach(house => {
-        scores[house] += (pointOffsets[house] || 0);
-      })
-      
-      const updatedScores = houses.map(house => scores[house] || 0)
-      
-      leaderboardChart.data.datasets[0].data = [0, 0, 0, 0]
-      leaderboardChart.update()
-      
-      revealBarsSequentially(updatedScores)
-    }
-    
-    function revealBarsSequentially(finalScores) {
-      const revealDelay = 2000
-      
-      houses.forEach((house, index) => {
-        setTimeout(() => {
-          leaderboardChart.data.datasets[0].data[index] = finalScores[index]
-          leaderboardChart.update()
-          
-        }, index * revealDelay)
-      })
-    }
-
-    socket.on("disconnect", () => {
-      console.log("Disconnected from the server.")
-    })
-
-    socket.on("switchScreen", (newScreen) => {
-      if(newScreen == "questions"){
-        window.location.href = `../index.html?ip=${ip}`
-      }
-    })
-  </script>
-</body>
+        
+        socket.on("connect", () => {
+            socket.emit("join", "results")
+        })
+        
+        socket.on("pointsOffset", (offsetData) => {
+            pointOffsets = offsetData
+            if (currentAnswers) {
+                updateScoresDisplay(currentAnswers)
+            }
+        })
+        
+        socket.on("results", (answers) => {
+            currentAnswers = answers
+            updateScoresDisplay(currentAnswers)
+        })
+        
+        socket.on("switchScreen", (newScreen) => {
+            if (newScreen === "questions") {
+                window.location.href = `../index.html?ip=${ip}`
+            }
+        })
+        
+        socket.on("disconnect", () => {
+            console.log("Disconnected from the server")
+        })
+        
+        function updateScoresDisplay(answers) {
+            leaderboardChart.data.datasets[0].data = houses.map(() => 0)
+            leaderboardChart.update()
+            
+            const scores = houses.reduce((acc, house) => {
+                acc[house] = pointOffsets[house] || 0
+                return acc
+            }, {})
+            
+            answers.forEach(answer => {
+                if (answer.correct && scores[answer.house] !== undefined) {
+                    scores[answer.house] += 10
+                }
+            })
+            
+            leaderboardChart.data.datasets[0].data = houses.map(house => scores[house])
+            leaderboardChart.update()
+        }
+    </script>
+    </body>
 </html>

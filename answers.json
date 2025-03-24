@@ -2,127 +2,46 @@
     {
         "house": "wesley",
         "questionName": "Which of these is a cool colour?",
-        "answer": "Orange",
+        "answer": "Green",
         "questionIndex": 0,
-        "answerIndex": 0,
-        "correct": false,
-        "time_left": 6930
-    },
-    {
-        "house": "wesley",
-        "questionName": "An SSD is a:",
-        "answer": "Solid State Drive",
-        "questionIndex": 1,
-        "answerIndex": 2,
-        "correct": true,
-        "time_left": 6386
-    },
-    {
-        "house": "wesley",
-        "questionName": "The correct unit of distance measurement in the DT workshops is:",
-        "answer": "Millimetres",
-        "questionIndex": 6,
-        "answerIndex": 3,
-        "correct": true,
-        "time_left": 3336
-    },
-    {
-        "house": "elliot",
-        "questionName": "The correct unit of distance measurement in the DT workshops is:",
-        "answer": "Millimetres",
-        "questionIndex": 6,
-        "answerIndex": 3,
-        "correct": true,
-        "time_left": 7720
-    },
-    {
-        "house": "elliot",
-        "questionName": "If a= 2, b= -2 and c= -3, evaluate a³ ÷ b² – c",
-        "answer": "4.5",
-        "questionIndex": 8,
         "answerIndex": 1,
+        "correct": true,
+        "time_left": 5567
+    },
+    {
+        "house": "elliot",
+        "questionName": "Which of these is a cool colour?",
+        "answer": "Green",
+        "questionIndex": 0,
+        "answerIndex": 1,
+        "correct": true,
+        "time_left": 5901
+    },
+    {
+        "house": "graham",
+        "questionName": "Which of these is a cool colour?",
+        "answer": "Black",
+        "questionIndex": 0,
+        "answerIndex": 3,
         "correct": false,
-        "time_left": 22605
-    },
-    {
-        "house": "elliot",
-        "questionName": "Which of the following is not a primary source from Ancient Australia?",
-        "answer": "Middens",
-        "questionIndex": 4,
-        "answerIndex": 2,
-        "correct": false,
-        "time_left": 4218
-    },
-    {
-        "house": "elliot",
-        "questionName": "Supplies used in the production of a good or service are known as:",
-        "answer": "Capital resources",
-        "questionIndex": 13,
-        "answerIndex": 2,
-        "correct": true,
-        "time_left": 4436
-    },
-    {
-        "house": "elliot",
-        "questionName": "What must 0.05 be divided by to get 50?",
-        "answer": "0.001",
-        "questionIndex": 19,
-        "answerIndex": 2,
-        "correct": true,
-        "time_left": 17783
-    },
-    {
-        "house": "elliot",
-        "questionName": "Whose eyes look over the Valley of Ashes in 'The Great Gatsby'?",
-        "answer": "T.J Eckleburg",
-        "questionIndex": 24,
-        "answerIndex": 0,
-        "correct": true,
-        "time_left": 8252
-    },
-    {
-        "house": "wesley",
-        "questionName": "If a= 2, b= -2 and c= -3, evaluate a³ ÷ b² – c",
-        "answer": "5",
-        "questionIndex": 8,
-        "answerIndex": 2,
-        "correct": true,
-        "time_left": 13411
+        "time_left": 8133
     },
     {
         "house": "booth",
-        "questionName": "An SSD is a:",
-        "answer": "Solid State Drive",
-        "questionIndex": 1,
+        "questionName": "Which of these is a cool colour?",
+        "answer": "Red",
+        "questionIndex": 0,
         "answerIndex": 2,
-        "correct": true,
-        "time_left": 6754
-    },
-    {
-        "house": "graham",
-        "questionName": "An SSD is a:",
-        "answer": "Solid State Drive",
-        "questionIndex": 1,
-        "answerIndex": 2,
-        "correct": true,
-        "time_left": 7392
-    },
-    {
-        "house": "graham",
-        "questionName": "If a= 2, b= -2 and c= -3, evaluate a³ ÷ b² – c",
-        "answer": "5",
-        "questionIndex": 8,
-        "answerIndex": 2,
-        "correct": true,
-        "time_left": 22081
+        "correct": false,
+        "time_left": 8133
     },
     {
         "house": "wesley",
-        "questionName": "What does oyasuminasai mean in Japanese?",
-        "answer": "Nice to meet you",
-        "questionIndex": 3,
-        "answerIndex": 2,
+        "questionName": "Which of the following is not a primary source from Ancient Australia?",
+        "answer": "Rock paintings and traditional art",
+        "questionIndex": 4,
+        "answerIndex": 1,
         "correct": false,
-        "time_left": 7261
+        "time_left": 2908
     }
 ]

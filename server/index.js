@@ -78,6 +78,10 @@ io.on("connection", (socket) => {
         
         s.results.forEach(socket => socket.emit("pointsOffset", other.pointsOffset))
     })
+
+    socket.on('revealScores', () => {
+        s.results.forEach(socket => socket.emit("revealScores"))
+    })
 })
 
 var networkInterfaces = os.networkInterfaces()
@@ -149,6 +153,37 @@ function onChangeQuestion(questionIndex){
     s.house.forEach(houseSocket => houseSocket.emit("displayQuestion", getCurrentQuestion()))
 
     updateAnswersPresented()
+    
+    const question = questions[questionIndex]
+    if (question && question.time_limit) {
+        setTimeout(() => {
+            sendCorrectAnswers(questionIndex)
+        }, question.time_limit + 1000)
+    }
+}
+
+function sendCorrectAnswers(questionIndex) {
+    const question = questions[questionIndex]
+    if (!question) return
+    
+    const questionAnswers = answers.filter(a => a.questionIndex === questionIndex)
+    
+    const correctAnswers = {
+        wesley: false,
+        booth: false,
+        elliot: false,
+        graham: false
+    }
+    
+    questionAnswers.forEach(answer => {
+        if (answer.correct) {
+            correctAnswers[answer.house] = true
+        }
+    })
+    
+    s.presenter.forEach(presenter => 
+        presenter.emit("correctAnswers", correctAnswers)
+    )
 }
 
 function onSubmitAnswer({questionName, answer, house}){

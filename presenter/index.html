@@ -72,6 +72,7 @@
             let houseIcon = document.createElement("div")
             houseIcon.innerHTML = house
             houseIcon.setAttribute("class", "houseIcon")
+            houseIcon.setAttribute("id", `icon-${house}`)
             houseIconContainer.appendChild(houseIcon)
         })
         
@@ -89,4 +90,17 @@
 
         document.getElementById("question").innerHTML = question.question
     })
+
+    socket.on("correctAnswers", (correctAnswers) => {
+        for (const house in correctAnswers) {
+            const houseIcon = document.getElementById(`icon-${house}`);
+            if (houseIcon) {
+                if (correctAnswers[house]) {
+                    houseIcon.classList.add("correct-answer");
+                } else {
+                    houseIcon.classList.remove("correct-answer");
+                }
+            }
+        }
+    });
 </script>

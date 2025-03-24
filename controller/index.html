@@ -21,19 +21,19 @@
             <h3>points offset</h3>
             <div>
                 <label>wesley</label>
-                <input type="number" id="wesleyOffset" onchange="updateOffset('wesley')"></input>
+                <input type="number" id="wesleyOffset" oninput="updateOffset('wesley')"></input>
             </div>
             <div>
                 <label>booth</label>
-                <input type="number" id="boothOffset" onchange="updateOffset('booth')"></input>
+                <input type="number" id="boothOffset" oninput="updateOffset('booth')"></input>
             </div>
             <div>
                 <label>elliot</label>
-                <input type="number" id="elliotOffset" onchange="updateOffset('elliot')"></input>
+                <input type="number" id="elliotOffset" oninput="updateOffset('elliot')"></input>
             </div>
             <div>
                 <label>graham</label>
-                <input type="number" id="grahamOffset" onchange="updateOffset('graham')"></input>
+                <input type="number" id="grahamOffset" oninput="updateOffset('graham')"></input>
             </div>
         </div>
         <div class="outline-div">
@@ -118,5 +118,9 @@
         console.log(name)
         const element = document.getElementById(name + "Offset")
         socket.emit("updateOffset", {houseName: name, newOffset: element.value})
+    }
+    
+    function revealScores(){
+        socket.emit("revealScores")
     }
 </script>
