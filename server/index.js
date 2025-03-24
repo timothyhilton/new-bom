@@ -70,11 +70,13 @@ io.on("connection", (socket) => {
     })
 
     socket.on("updateOffset", (data) => {
-        other.pointsOffset[data.houseName] = data.newOffset
+        other.pointsOffset[data.houseName] = parseInt(data.newOffset) || 0
         console.log(other)
 
-        fs.writeFileSync('../other.json', JSON.stringify(data, null, 4))
-        s.controller.forEach(socket => socket.emit("pointsOffset", ""))
+        fs.writeFileSync('../other.json', JSON.stringify(other, null, 4))
+        s.controller.forEach(socket => socket.emit("pointsOffset", other.pointsOffset))
+        
+        s.results.forEach(socket => socket.emit("pointsOffset", other.pointsOffset))
     })
 })
 
@@ -98,6 +100,7 @@ httpServer.listen(3000)
 
 function onResultsJoin(socket){
     socket.emit("results", answers)
+    socket.emit("pointsOffset", other.pointsOffset)
     s.results.push(socket)
 }
 
@@ -110,6 +113,7 @@ function onHouseJoin(houseName, socket){
 
 function onControllerJoin(socket){
     socket.emit("questions", questions)
+    socket.emit("pointsOffset", other.pointsOffset)
     socket.on("changeQuestion", onChangeQuestion)
 }
 

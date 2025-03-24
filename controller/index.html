@@ -96,6 +96,15 @@
         })
     })
 
+    socket.on("pointsOffset", (offsetData) => {
+        for (const house in offsetData) {
+            const inputElement = document.getElementById(house + "Offset");
+            if (inputElement) {
+                inputElement.value = offsetData[house] || 0;
+            }
+        }
+    })
+
     function changeQuestion(questionIndex){
         document.getElementById("current_question").innerText = questionsArray[questionIndex].question
         socket.emit("changeQuestion", questionIndex)
@@ -106,6 +115,7 @@
     }
 
     function updateOffset(name){
+        console.log(name)
         const element = document.getElementById(name + "Offset")
         socket.emit("updateOffset", {houseName: name, newOffset: element.value})
     }
