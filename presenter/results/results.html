@@ -6,6 +6,7 @@
     <title>house leaderboard</title>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../index.css">
     <style>
         body {
         background-color: #121212;
@@ -48,6 +49,7 @@
     </div>
 
     <script>
+        const answerWeighting = 10
         const houses = ["wesley", "booth", "elliot", "graham"]
         const houseColors = {
             wesley: { bg: 'rgba(255, 255, 0, 0.8)', border: 'rgba(255, 255, 0, 1)' },
@@ -88,7 +90,6 @@
                 },
                 scales: {
                     y: {
-                    beginAtZero: true,
                     ticks: { 
                         precision: 0,
                         font: { size: 24, weight: 'bold' },
@@ -139,7 +140,6 @@
         
         function updateScoresDisplay(answers) {
             leaderboardChart.data.datasets[0].data = houses.map(() => 0)
-            leaderboardChart.update()
             
             const scores = houses.reduce((acc, house) => {
                 acc[house] = pointOffsets[house] || 0
@@ -148,11 +148,16 @@
             
             answers.forEach(answer => {
                 if (answer.correct && scores[answer.house] !== undefined) {
-                    scores[answer.house] += 10
+                    scores[answer.house] += answerWeighting
                 }
             })
             
-            leaderboardChart.data.datasets[0].data = houses.map(house => scores[house])
+            const scoreValues = houses.map(house => scores[house])
+            leaderboardChart.data.datasets[0].data = scoreValues
+
+            const minScore = Math.min(...scoreValues)
+            leaderboardChart.options.scales.y.min = Math.max(0, Math.round((minScore - 5) / 2))
+            
             leaderboardChart.update()
         }
     </script>

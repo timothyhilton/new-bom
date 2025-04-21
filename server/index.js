@@ -19,6 +19,7 @@ var other = JSON.parse(fs.readFileSync('../other.json', 'utf8'))
 var presenterMode = ""
 var currentQuestion = null
 var timeAtLastChange = 0
+var revealTimerId = null
 const io = new Server(httpServer, {
     cors: {
         origin: "*",
@@ -147,6 +148,11 @@ function updateAnswersPresented(){
 }
 
 function onChangeQuestion(questionIndex){
+    if (revealTimerId) {
+        clearTimeout(revealTimerId)
+        revealTimerId = null
+    }
+
     currentQuestion = questionIndex
     timeAtLastChange = Date.now()
 
@@ -156,10 +162,11 @@ function onChangeQuestion(questionIndex){
     
     const question = questions[questionIndex]
     if (question && question.time_limit) {
-        setTimeout(() => {
+        revealTimerId = setTimeout(() => {
             if (currentQuestion === questionIndex) { 
                 sendCorrectAnswers(questionIndex)
             }
+            revealTimerId = null
         }, question.time_limit)
     }
 }
