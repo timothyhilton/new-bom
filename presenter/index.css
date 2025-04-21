@@ -53,10 +53,10 @@ body {
     border: none;
     cursor: pointer;
     min-height: 15vh;
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.5);
-    transition: all 0.3s ease;
+    transition: all 1s ease;
     color: white;   
     background-color: #333;
+    border: 1px solid #525252;
 }
 
 #bottomRow {
@@ -80,12 +80,15 @@ body {
     border-radius: 10px;
     font-weight: bold;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transition: all 1s ease;
+    transition-delay: all 4s;
+    border: 2px solid #333;
 }
 
 #timer {
     font-size: 3.5rem;
     font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: #333;
     padding: 10px 25px;
     border-radius: 15px;
     margin: 0;
@@ -108,7 +111,8 @@ body {
 }
 
 .correct-answer {
-    background-color: #4caf50;
+    background-color: #327634;
     border: 2px solid #45a049;
     color: white;
+    box-shadow: 0 0 20px rgb(41, 136, 59);
 }

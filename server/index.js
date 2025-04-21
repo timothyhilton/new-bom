@@ -158,7 +158,7 @@ function onChangeQuestion(questionIndex){
     if (question && question.time_limit) {
         setTimeout(() => {
             sendCorrectAnswers(questionIndex)
-        }, question.time_limit + 1000)
+        }, question.time_limit)
     }
 }
 

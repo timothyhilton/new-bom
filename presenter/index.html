@@ -34,6 +34,7 @@
     const urlParams = new URLSearchParams(queryString)
     const houseIconContainer = document.getElementById("houseIconContainer")
     const answersDiv = document.getElementById("answers")
+    var correctAnswerElement
 
     const socket = io(urlParams.get("ip"))
 
@@ -41,7 +42,8 @@
         socket.emit("join", "presenter")
     })
     function updateTimer(){
-        document.getElementById("timer").innerHTML = Math.max(((currentQuestion.t + currentQuestion.time_limit - Date.now()) / 1000).toFixed(1), 0)
+        let time = Math.max(((currentQuestion.t + currentQuestion.time_limit - Date.now()) / 1000).toFixed(1), 0)
+        document.getElementById("timer").innerHTML = time > 4 ? time.toFixed(0) : time
     }
     setInterval(updateTimer, 80)
 
@@ -55,14 +57,19 @@
         currentQuestion = question
         answersDiv.innerHTML = null
         houseIconContainer.innerHTML = null
-        console.log(question)
+        console.log("question", question)
 
         question.answers.forEach(answer => {
             let index = question.answers.indexOf(answer)
             let button = document.createElement("BUTTON")
+
             button.innerHTML = answer
             button.setAttribute("onclick", `submitAnswer(${index})`)
             button.setAttribute("class", `answerButton button${index + 1}`)
+            
+            if(index == question.correct_answer)
+                correctAnswerElement = button
+
             answersDiv.appendChild(button)
         })
 
@@ -92,6 +99,8 @@
     })
 
     socket.on("correctAnswers", (correctAnswers) => {
+        correctAnswerElement.classList.value += " correct-answer"
+
         for (const house in correctAnswers) {
             const houseIcon = document.getElementById(`icon-${house}`);
             if (houseIcon) {
