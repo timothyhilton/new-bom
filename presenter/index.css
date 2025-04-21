@@ -1,14 +1,30 @@
 body {
-    font-family: 'Arial', Helvetica, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #121212;
     color: white;
     margin: 0;
-    padding: 0;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    position: relative;
+    z-index: 0;
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('bg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    opacity: 0.05;
+    z-index: -1;
 }
 
 .titleDiv {
@@ -55,7 +71,7 @@ body {
     min-height: 15vh;
     transition: all 1s ease;
     color: white;   
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.5);
     border: 1px solid #525252;
 }
 
@@ -64,7 +80,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 2vh 5vw;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(31, 31, 31, 0.5);
+    border: 1px solid #272727;
 }
 
 #houseIconContainer {
@@ -74,26 +91,27 @@ body {
 
 .houseIcon {
     font-size: 2rem;
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.5);
     color: white;
     padding: 10px 15px;
-    border-radius: 10px;
+    border-radius: 15px;
     font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     transition: all 1s ease;
     transition-delay: all 4s;
-    border: 2px solid #333;
+    border: 1px solid #525252;
+    cursor: pointer;
 }
 
 #timer {
     font-size: 3.5rem;
     font-weight: bold;
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.5);
     padding: 10px 25px;
     border-radius: 15px;
     margin: 0;
     color: #f8f8f8;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    border: 1px solid #525252;
 }
 
 @media (min-width: 1200px) {
@@ -111,7 +129,7 @@ body {
 }
 
 .correct-answer {
-    background-color: #327634;
+    background-color: rgb(51, 117, 53, 0.5);
     border: 2px solid #45a049;
     color: white;
     box-shadow: 0 0 20px rgb(41, 136, 59);

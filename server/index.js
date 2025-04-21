@@ -157,7 +157,9 @@ function onChangeQuestion(questionIndex){
     const question = questions[questionIndex]
     if (question && question.time_limit) {
         setTimeout(() => {
-            sendCorrectAnswers(questionIndex)
+            if (currentQuestion === questionIndex) { 
+                sendCorrectAnswers(questionIndex)
+            }
         }, question.time_limit)
     }
 }
