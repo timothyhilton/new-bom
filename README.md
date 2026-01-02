@@ -13,5 +13,6 @@ During the event there is 1 computer on the "presenter" page, 4 "player" compute
 ### Tech stack
 I tried to keep this one very simple, it uses plain static html, css, js for the pages, with socket.io for communication and node for the server
 
-[Watch it in action here!!](./readme/video.MP4)
+Watch it in action here!!
+https://imgur.com/a/P7eZ35q
 
